@@ -13,20 +13,10 @@ all: $(OS)
 
 macos: sudo core-macos packages link
 
-linux: core-linux link
-
-core-macos: brew bash git npm ruby
-
-core-linux:
-	apt-get update
-	apt-get upgrade -y
-	apt-get dist-upgrade -f
+core-macos: brew git npm ruby
 
 stow-macos: brew
 	is-executable stow || brew install stow
-
-stow-linux: core-linux
-	is-executable stow || apt-get -y install stow
 
 sudo:
 ifndef GITHUB_ACTION
@@ -76,17 +66,11 @@ npm:
 	if ! [ -d $(NVM_DIR)/.git ]; then git clone https://github.com/creationix/nvm.git $(NVM_DIR); fi
 	. $(NVM_DIR)/nvm.sh; nvm install --lts
 
-ruby: brew
-	brew install ruby
-
 brew-packages: brew
 	brew bundle --file=$(DOTFILES_DIR)/install/Brewfile
 
 cask-apps: brew
 	brew bundle --file=$(DOTFILES_DIR)/install/Caskfile || true
-	defaults write org.hammerspoon.Hammerspoon MJConfigFile "~/.config/hammerspoon/init.lua"
-	for EXT in $$(cat install/Codefile); do code --install-extension $$EXT; done
-	xattr -d -r com.apple.quarantine ~/Library/QuickLook
 
 node-packages: npm
 	. $(NVM_DIR)/nvm.sh; npm install -g $(shell cat install/npmfile)
