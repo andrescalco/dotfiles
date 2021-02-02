@@ -13,7 +13,7 @@ all: $(OS)
 
 macos: sudo core-macos packages link
 
-core-macos: brew git npm ruby
+core-macos: brew git npm
 
 stow-macos: brew
 	is-executable stow || brew install stow
@@ -24,7 +24,7 @@ ifndef GITHUB_ACTION
 	while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 endif
 
-packages: brew-packages cask-apps node-packages
+packages: brew-packages cask-apps node-packages vim-plug
 
 link: stow-$(OS)
 	for FILE in $$(\ls -A runcom); do if [ -f $(HOME)/$$FILE -a ! -h $(HOME)/$$FILE ]; then \
