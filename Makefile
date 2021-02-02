@@ -77,3 +77,7 @@ node-packages: npm
 
 test:
 	. $(NVM_DIR)/nvm.sh; bats test
+
+vim-plug: curl 
+	-fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
